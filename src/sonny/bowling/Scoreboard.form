@@ -73,6 +73,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -85,6 +86,7 @@
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
                     <properties>
+                      <horizontalAlignment value="0"/>
                       <text value=""/>
                     </properties>
                   </component>
@@ -95,7 +97,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -136,6 +140,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -147,7 +152,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="4c2da" class="javax.swing.JTextField" binding="two_throw2_text">
                     <constraints>
@@ -156,7 +163,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -197,6 +206,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -208,7 +218,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="c3fa7" class="javax.swing.JTextField" binding="ten_throw3_text">
                     <constraints>
@@ -217,7 +229,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="68318" class="javax.swing.JTextField" binding="ten_throw2_text">
                     <constraints>
@@ -226,7 +240,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -267,6 +283,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -278,7 +295,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="63931" class="javax.swing.JTextField" binding="three_throw2_text">
                     <constraints>
@@ -287,7 +306,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -328,6 +349,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -339,7 +361,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="6ab9" class="javax.swing.JTextField" binding="four_throw2_text">
                     <constraints>
@@ -348,7 +372,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -389,6 +415,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -400,7 +427,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="da69c" class="javax.swing.JTextField" binding="nine_throw2_text">
                     <constraints>
@@ -409,7 +438,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -450,6 +481,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -461,7 +493,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="9b149" class="javax.swing.JTextField" binding="eight_throw2_text">
                     <constraints>
@@ -470,7 +504,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -511,6 +547,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -522,7 +559,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="ab81d" class="javax.swing.JTextField" binding="seven_throw2_text">
                     <constraints>
@@ -531,7 +570,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -572,6 +613,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -583,7 +625,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="58b78" class="javax.swing.JTextField" binding="six_throw2_text">
                     <constraints>
@@ -592,7 +636,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>
@@ -633,6 +679,7 @@
                     </constraints>
                     <properties>
                       <editable value="false"/>
+                      <horizontalAlignment value="0"/>
                       <minimumSize width="100" height="30"/>
                       <preferredSize width="100" height="30"/>
                     </properties>
@@ -644,7 +691,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                   <component id="20d74" class="javax.swing.JTextField" binding="five_throw2_text">
                     <constraints>
@@ -653,7 +702,9 @@
                       </grid>
                       <gridbag weightx="1.0" weighty="1.0"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <horizontalAlignment value="0"/>
+                    </properties>
                   </component>
                 </children>
               </grid>

@@ -202,9 +202,10 @@ public class Scoreboard {
                     if (input3 != SPARE_CHAR) { value += getPoints(input3); }   // (Strike) -> (Strike/Digit)   Value += third
                 }
                 else if (input2 == SPARE_CHAR) { value += getPoints(input2); }  // (Digit) -> (Spare)           Value += second
-                else if (isNum(input1) && isNum(input2)) {                      // (Digit) -> (Digit)           Value += first + second
-                    value += getPoints(input1) + getPoints(input2);
-                    if (getPoints(input1) + getPoints(input2) >= STRIKE_SPARE_SCORE) { value += STRIKE_SPARE_SCORE - getPoints(input1) - getPoints(input2); } // (Digit) -> (Digit) [ Spare ]   Value += Spare(10) - first - second
+                else if (isNum(input1)) {                      // (Digit) -> (Digit)           Value += first
+                    value += getPoints(input1);
+                    if (getPoints(input1) + getPoints(input2) >= STRIKE_SPARE_SCORE) { value += STRIKE_SPARE_SCORE - getPoints(input1); } // (Digit) -> (Digit) [ Spare ]   Value += Spare(10) - first
+                    else if (isNum(input2)) { value += getPoints(input2); } // (Digit) -> (Digit) Value += second
                 }
             }
             else if (input1 != SPARE_CHAR) { value += getPoints(input1); }      // If we should just grab next shot. [Spare] Value += first
