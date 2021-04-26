@@ -274,7 +274,7 @@
                       <text value="3"/>
                     </properties>
                   </component>
-                  <component id="5234" class="javax.swing.JTextField" binding="three_score_label">
+                  <component id="5234" class="javax.swing.JTextField" binding="three_score_text">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="4" fill="0" indent="0" use-parent-layout="false">
                         <preferred-size width="150" height="-1"/>

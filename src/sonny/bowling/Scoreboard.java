@@ -32,7 +32,7 @@ public class Scoreboard {
     private JTextField two_throw1_text;
     private JTextField two_throw2_text;
     private JLabel three_label;
-    private JTextField three_score_label;
+    private JTextField three_score_text;
     private JTextField three_throw1_text;
     private JTextField three_throw2_text;
     private JLabel four_label;
@@ -80,57 +80,53 @@ public class Scoreboard {
     /* Array of score TextField references. 1 TextField per frame.
        TextField Index : [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
     */
-    private JTextField[] scoreFields = {one_score_text, two_score_text, three_score_label, four_score_text,
+    private JTextField[] scoreFields = {one_score_text, two_score_text, three_score_text, four_score_text,
             five_score_text, six_score_text, seven_score_text, eight_score_text, nine_score_text, ten_score_text};
 
-    // String which acts as a character array. Holds all inputted values from GUI.
-    private String inputs = "";
-
-    // Int array which holds calculated scores.
-    private int[] scores = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
     // Constant values
-    final int FRAME_COUNT = 10;
-    final int LAST_FRAME = FRAME_COUNT - 1;
-    final int LAST_FRAME_INDEX = 18;
-
+    final int FRAME_COUNT = 10, LAST_FRAME = FRAME_COUNT - 1, LAST_FRAME_INDEX = LAST_FRAME * 2;
     final int STRIKE_SPARE_SCORE = 10;
 
-    final char STRIKE_CHAR = 'x';
-    final char SPARE_CHAR = '/';
-    final char EMPTY_CHAR = ' ';
+    // Non-digit character representation.
+    final char STRIKE_CHAR = 'x', SPARE_CHAR = '/', WRONG_CHAR = '?', EMPTY_CHAR = ' ';
 
     public Scoreboard() {
         // Action listener for the reset button
         resetButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { resetBoard(); }
+            public void actionPerformed(ActionEvent e) {
+                resetBoard();
+            }
         });
 
         // Document listener for each editable TextField. Listens to realtime text updating.
         DocumentListener realtimeUpdate = new DocumentListener() {
             @Override
-            public void insertUpdate(DocumentEvent e) { onTextUpdate(); }
+            public void insertUpdate(DocumentEvent e) {
+                onTextUpdate();
+            }
             @Override
-            public void removeUpdate(DocumentEvent e) { onTextUpdate(); }
+            public void removeUpdate(DocumentEvent e) {
+                onTextUpdate();
+            }
             @Override
-            public void changedUpdate(DocumentEvent e) { onTextUpdate(); }
+            public void changedUpdate(DocumentEvent e) {
+                onTextUpdate();
+            }
         };
 
         // Add the document listener to each TextField in [inputFields].
-        for (JTextField i : inputFields) { i.getDocument().addDocumentListener(realtimeUpdate); }
+        for (JTextField field : inputFields)
+            field.getDocument().addDocumentListener(realtimeUpdate);
     }
 
-    /* Method called when text is updated.
-    */
+    // Method called when text is updated.
     private void onTextUpdate() {
-        grabInputs();
-        calculateScores();
-        displayScores();
+        String inputs = grabInputs();
+        displayScores(calculateScores(inputs), inputs);
     }
 
-    /* Main method. Sets up Java SWING GUI.
-    */
+    // Main method. Sets up Java SWING GUI.
     public static void main(String[] args) {
         JFrame frame = new JFrame("App");
         frame.setContentPane(new Scoreboard().mainPanel);
@@ -139,195 +135,191 @@ public class Scoreboard {
         frame.setVisible(true);
     }
 
-    /* Fills the global level array, [scores] with the calculated scores from each bowling frame.
-    */
-    private void calculateScores() {
-        int frameScore = 0, startIndex = 0;
-        char value1 = '0', value2 = '0', value3 = '0';
-
-        // Calculate scores for frames 0 - 9.
-        for (int i = 0; i < FRAME_COUNT; i++) {
-
-            // Start by grabbing total score.
-            if (i == 0) { frameScore = 0; }
-            else { frameScore = getScore(i - 1); }
-
-            // This is the index of textField1's value in the string.
-            startIndex = 2 * i;
-            value1 = getInput(startIndex);
-            value2 = getInput(startIndex + 1);
-
-            if (i < LAST_FRAME) {       // If current frame is 0-9.
-                if (value1 == STRIKE_CHAR) { frameScore += getPoints(value1) + grabNextThrows(i, true); }       // (Strike) Score += Strike(10) + next two shots.
-                else if (value2 == SPARE_CHAR) { frameScore += getPoints(value2) + grabNextThrows(i, false); }      // (Digit)(Spare) Score += Spare(10) + next shot.
-                else if (isNum(value1) && isNum(value2)) {      // (Digit)(Digit)
-                    if (getPoints(value1) + getPoints(value2) >= STRIKE_SPARE_SCORE) { frameScore += STRIKE_SPARE_SCORE + grabNextThrows(i, false); }       // (Digit)(Digit) [Spare] Score += Spare(10) + next shot.
-                    else { frameScore += getPoints(value1) + getPoints(value2); }       // (Digit)(Digit) Score += Sum of two shots.
-                }
-            }
-            else {      // If current frame is 10.
-                value3 = getInput(startIndex + 2);      // Grab tenth frame's third value.
-
-                frameScore += getPoints(value1) + getPoints(value2);        // Score += first and second value.
-
-                if (value1 == STRIKE_CHAR) { frameScore += getPoints(value3); }     // (Strike)(Strike/Digit)(Strike/Digit) Score += third value.
-                else if (value2 == SPARE_CHAR) { frameScore += getPoints(value3) - getPoints(value1); }     // (Digit)(Spare)(Digit/Strike) Score += third value - first value (the spare character returns 10 score)
-                else if (getPoints(value1) + getPoints(value2) >= STRIKE_SPARE_SCORE) { frameScore += STRIKE_SPARE_SCORE + getPoints(value3) - getPoints(value1) - getPoints(value2); }     // (Digit)(Digit)(Digit/Strike) [Spare] Score += Spare(10) + third - first - second
-            }
-            setScore(i, frameScore);
-        }
-    }
-
-    /* Returns the score of the two next shots given the current frame and the type of shot.
-       @params: frame = reference to the current frame.
-       @params: strike = boolean flag which determines how method functions.
-       @return: Integer value of the scores of the two next shots.
-    */
-    private int grabNextThrows(int frame, boolean strike) {
-        int startIndex, value = 0;;
+    // Parses the given input string and calculates score and bonuses based on each character. Returns an array with calculated scores.
+    private int[] calculateScores(String inputs) {
+        int[] scores = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        int result = 0, frameIndex;
         char input1, input2, input3;
 
-        // Grab next frame's starting index and first value.
-        startIndex = 2 * (frame + 1);
-        input1 = getInput(startIndex);
+        /*  Input is represented as designated characters in a string.
+            Depending on which character it is, getPoints(char) will return a designated value for it.
 
-        if (frame < LAST_FRAME - 1) {       // If next frame is 8 or below. (Frames 9 & 10 handle values differently)
-            if (strike) {       // If we should grab next two shots [Strike]
-                // Grab next frame's 2nd value and next frame's first value. (Needed for strikes)
-                input2 = getInput(startIndex + 1);
-                input3 = getInput(startIndex + 2);
+            Example input string = "51x 5/34x x 73x x xx?" (always 21 characters long)
+            Empty textFields = ' ', Wrong characters = '?', Digits = '0' - '9', Strike = 'x', Spare = '/'
+        */
 
-                if (input1 == STRIKE_CHAR) {        // If-else structure is based on all possible permutations, then simplified.
-                    value += getPoints(input1);                                 // (Strike) -> ...              Value += first
-                    if (input3 != SPARE_CHAR) { value += getPoints(input3); }   // (Strike) -> (Strike/Digit)   Value += third
+        for (int frame = 0; frame < FRAME_COUNT; frame++) {
+
+            // Start by grabbing score of previous frame
+            if (frame == 0) { frameIndex = 0; }
+            else { frameIndex = scores[frame - 1]; }
+
+            // Grab all needed values
+            frameIndex = 2 * frame;
+            input1 = inputs.charAt(frameIndex);
+            input2= inputs.charAt(frameIndex + 1);
+            input3 = inputs.charAt(frameIndex + 2);
+
+            // Score += Value of both TextFields in frame.
+            result += getPoints(input1) + getPoints(input2);
+
+            if (input1 == STRIKE_CHAR) {
+                if (frame == LAST_FRAME) {
+                    // Score += Last TextField's value.
+                    result += getPoints(input3);
+                    // If last two shots are spare
+                    if (isNum(input2) && (input3 == SPARE_CHAR || (isNum(input3) && getPoints(input2) + getPoints(input3) >= STRIKE_SPARE_SCORE)))
+                        result += STRIKE_SPARE_SCORE - getPoints(input2) - getPoints(input3);
                 }
-                else if (input2 == SPARE_CHAR) { value += getPoints(input2); }  // (Digit) -> (Spare)           Value += second
-                else if (isNum(input1)) {                      // (Digit) -> (Digit)           Value += first
-                    value += getPoints(input1);
-                    if (getPoints(input1) + getPoints(input2) >= STRIKE_SPARE_SCORE) { value += STRIKE_SPARE_SCORE - getPoints(input1); } // (Digit) -> (Digit) [ Spare ]   Value += Spare(10) - first
-                    else if (isNum(input2)) { value += getPoints(input2); } // (Digit) -> (Digit) Value += second
+                else // Not last frame
+                    result += grabNextThrows(inputs, frame, true) - getPoints(input2);
+            }
+            else if (isNum(input1)) {
+                // If first two shots are spare.
+                if (input2 == SPARE_CHAR || (isNum(input2) && getPoints(input1) + getPoints(input2) >= STRIKE_SPARE_SCORE)) {
+                    if (frame == LAST_FRAME)
+                        result += STRIKE_SPARE_SCORE + getPoints(input3) - getPoints(input1) - getPoints(input2);
+                    else // Not last frame
+                        result += STRIKE_SPARE_SCORE + grabNextThrows(inputs, frame, false) - getPoints(input1) - getPoints(input2);
                 }
             }
-            else if (input1 != SPARE_CHAR) { value += getPoints(input1); }      // If we should just grab next shot. [Spare] Value += first
+            scores[frame] = result;
         }
-        else {      // If current frame is 9. (10 is handled directly in calculateScores().
-            if (strike) {       // If we should grab next two shots [Strike]
-                input2 = getInput(startIndex + 1);
+        return scores;
+    }
 
-                if (input1 == STRIKE_CHAR) {                                    // (Strike) -> ...              Value += first
-                    value += getPoints(input1);
-                    if (input2 != SPARE_CHAR) { value += getPoints(input2); }   // (Strike) -> (Digit / Strike) Value += second
-                }
-                else if (isNum(input1)) {                                       // (Digit) -> ...               Value += first
-                    value += getPoints(input1);
-                    if (input2 == SPARE_CHAR) { value += getPoints(input2) - getPoints(input1); } // (Digit) -> (Spare)     Value += second(10) - first
-                    else if (isNum(input2)) {                                   // (Digit) -> (Digit)           Value += second
-                        value += getPoints(input2);
-                        if (getPoints(input1) + getPoints(input2) >= STRIKE_SPARE_SCORE) { value += STRIKE_SPARE_SCORE - getPoints(input1) - getPoints(input2); }   // (Digit) -> (Digit) [Spare] Value += Spare(10) - first - second
-                    }
-                }
+
+    // Given a frame, and a boolean flag, calculates the sum of the next two shots and returns it.
+    private int grabNextThrows(String inputs, int frame, boolean isStrike) {
+        int nextFrameIndex, value = 0;;
+        char input1, input2, input3;
+
+        // Grab next frame's starting index and first shot.
+        nextFrameIndex = 2 * (frame + 1);
+        input1 = inputs.charAt(nextFrameIndex);
+
+        // Do we grab next 1 or 2 shots?
+        if (isStrike) {
+            // Grab needed values (2nd shot)
+            input2 = inputs.charAt(nextFrameIndex + 1);
+            input3 = inputs.charAt(nextFrameIndex + 2);
+
+            // If next shot was a strike
+            if (input1 == STRIKE_CHAR) {
+                value += getPoints(input1);
+                // If next frame is the 10th
+                if (nextFrameIndex < LAST_FRAME_INDEX && input3 != SPARE_CHAR)
+                    value += getPoints(input3);
+                else if (input2 != SPARE_CHAR)
+                    value += getPoints(input2);
             }
-            else if (input1 != SPARE_CHAR) { value += getPoints(input1); }      // If we should just grab next shot. [Spare] Value += first
+            // If next shot was a number
+            else if (isNum(input1)) {
+                value += getPoints(input1);
+
+                // If 2nd shot spared
+                if (input2 == SPARE_CHAR || (isNum(input2) && getPoints(input1) + getPoints(input2) >= STRIKE_SPARE_SCORE))
+                    value += STRIKE_SPARE_SCORE - getPoints(input1);
+                else
+                    value += getPoints(input2);
+            }
         }
+        // If just grabbing next shot
+        else if (input1 != SPARE_CHAR)
+            value += getPoints(input1);
+
         return value;
     }
 
-    /* Iterates through all score-holding TextFields and replaces the text with values in the global level array, [scores]
-    */
-    private void displayScores() {
+    // Given a calculated score, displays each frame's score in its designated JTextField.
+    private void displayScores(int[] scores, String inputs) {
         resetScores();
-        for (int i = 0; i < checkFrames(); i++) {
-            scoreFields[i].setText(Integer.toString(scores[i]));
+        for (int frame = 0; frame < checkFrames(inputs); frame++) {
+            scoreFields[frame].setText(Integer.toString(scores[frame]));
         }
     }
 
-    /* Returns how many frames are completed and have correct formatting. Iterates through each frame
-       and checks whether the inputs follow correct formatting using an if-else decision tree.
-       @return: integer value for how many round are syntactically correct.
-    */
-    private int checkFrames() {
+    // Iterates through each frame, checks for correct syntax and returns the number of syntactically correct rounds.
+    private int checkFrames(String inputs) {
         int rounds = 0, startIndex = 0;
         char v1, v2, v3;
 
-        // Iterate through each frame.
-        for (int i = 0; i < FRAME_COUNT; i++) {
-            startIndex = i * 2;
-
-            // Grab each frame's values.
-            v1 = getInput(startIndex + 0);
-            v2 = getInput(startIndex + 1);
-            v3 = getInput(startIndex + 2);
+        for (int frameIndex = 0; frameIndex <= LAST_FRAME_INDEX; frameIndex += 2) {
+            // Grab each frame's needed values.
+            v1 = inputs.charAt(frameIndex);
+            v2 = inputs.charAt(frameIndex + 1);
+            v3 = inputs.charAt(frameIndex + 2);
 
             /* For frames 1-9, check for the following bad conditions.
-               - Box1 contains either a spare or no characters.
-               - Box1 does not contain a strike, however Box2 contains either a strike or no characters.
+               - Box1 contains either a spare or no characters.                         [/][?]      [ ][?]
+               - Box1 does not contain a strike, Box2 contains a strike or nothing.     [1][x]      [1][ ]
             */
-            if (v1 == EMPTY_CHAR || v1 == SPARE_CHAR || (v1 != STRIKE_CHAR && (v2 == EMPTY_CHAR || v2 == STRIKE_CHAR))) { break; }
+            if (v1 == EMPTY_CHAR || v1 == SPARE_CHAR)
+                break;
+            else if (v1 != STRIKE_CHAR && (v2 == EMPTY_CHAR || v2 == STRIKE_CHAR))
+                break;
 
             /* For frame 10, check for the following bad conditions.
-               - Box1 contains a strike
-                    - Box2 contains a strike, Box3 is either a spare or no character.
-                    - Box2 contains a digit, Box3 is a strike or empty.
-                    - Box2 contains a spare or is empty or Box3 is empty.
-               - Box1 contains a digit and Box2 is a strike.
+               - Box1 contains a strike                                                 [x]
+                    - Box2 or Box3 contains no characters OR Box2 contains a spare      [x][/][?]    [x][ ][ ]
+                    - Box2 contains a strike, Box3 contains a spare                     [x][x][/]
+                    - Box2 contains a digit, Box3 contains a strike                     [x][1][x]
+               - Box1 contains a digit and Box2 is a strike.                            [1][x]
             */
-            if (i == LAST_FRAME) {
+            if (frameIndex == LAST_FRAME_INDEX) {
                 if (v1 == STRIKE_CHAR) {
-                    if (v2 == STRIKE_CHAR && (v3 == SPARE_CHAR || v3 == EMPTY_CHAR)) { break; }
-                    else if (isNum(v2) && (v3 == STRIKE_CHAR || v3 == EMPTY_CHAR)) { break; }
-                    else if (v2 == SPARE_CHAR || v2 == EMPTY_CHAR || v3 == EMPTY_CHAR) { break; }
+                    if (v2 == EMPTY_CHAR || v3 == EMPTY_CHAR || v2 == SPARE_CHAR)
+                        break;
+                    else if (v2 == STRIKE_CHAR && v3 == SPARE_CHAR)
+                        break;
+                    else if (isNum(v2) && v3 == STRIKE_CHAR)
+                        break;
                 }
-                else if (isNum(v1) && v2 == STRIKE_CHAR) { break; }
+                else if (isNum(v1) && v2 == STRIKE_CHAR)
+                    break;
             }
-
-            // Increments rounds up the frame that the for loop is broken out of.
+            // Increments rounds up to the last syntactically correct frame.
             rounds++;
         }
         return rounds;
     }
 
-    /* Grabs and stores all inputs in the global string variable, [inputs].
-    */
-    private void grabInputs() {
-        inputs = "";
+    // Grabs all inputs, stores them into a character array (String) and returns it.
+    private String grabInputs() {
+        String inputs = "";
         // Iterate through each frame. (Frames contain two TextFields, tenth has three)
-        for (int i = 0; i <= LAST_FRAME_INDEX; i += 2) {
-            // Concatenate the characters to the global string.
-            this.inputs = inputs.concat(Character.toString(getFirstChar(inputFields[i])));
-            this.inputs = inputs.concat(Character.toString(getFirstChar(inputFields[i + 1])));
-            if (i == LAST_FRAME_INDEX) { this.inputs = inputs.concat(Character.toString(getFirstChar(inputFields[i + 2]))); }
+        for (int frameIndex = 0; frameIndex <= LAST_FRAME_INDEX; frameIndex += 2) {
+            inputs = inputs.concat(Character.toString(getFirstChar(inputFields[frameIndex])));
+            inputs = inputs.concat(Character.toString(getFirstChar(inputFields[frameIndex + 1])));
+            if (frameIndex == LAST_FRAME_INDEX) { inputs = inputs.concat(Character.toString(getFirstChar(inputFields[frameIndex + 2]))); }
         }
+        return inputs;
     }
 
-    /* Grabs, converts to lowercase, and returns first character in a JTextField.
-       @params: field = JTextField which contains shot result.
-       @return: character value in the set, [ ' ', 'x', '/', '0-9' ]
-    */
+    // Grabs, converts to lowercase, and returns the first character from a JTextField.
     private char getFirstChar(JTextField field) {
         char firstChar;
 
-        // If TextField is left empty, denote character as a space.
-        if (field.getText().equals("")) {
+        // If TextField is empty
+        if (field.getText().equals(""))
             firstChar = EMPTY_CHAR;
-        }
-        // Else grab and process the character.
         else {
             firstChar = field.getText().toLowerCase().charAt(0);
-            // If character is not either a 'x', '/', '0-9', denote as '0'.
-            if (firstChar != STRIKE_CHAR && firstChar != SPARE_CHAR && !isNum(firstChar)) { firstChar = '0'; }
+
+            // If character is neither an 'x', '/', or digit
+            if (firstChar != STRIKE_CHAR && firstChar != SPARE_CHAR && !isNum(firstChar))
+                firstChar = WRONG_CHAR;
         }
         return firstChar;
     }
 
-    /* Returns a score value given a character.
-       @params: input = character.
-       @return: integer value <= 10
-    */
+    // Given a character input, returns the designated score value of that character.
     private int getPoints(char input) {
         switch (input) {
             case STRIKE_CHAR:
             case SPARE_CHAR:
                 return STRIKE_SPARE_SCORE;
+            case WRONG_CHAR:
             case EMPTY_CHAR:
                 return 0;
             default:
@@ -335,66 +327,31 @@ public class Scoreboard {
         }
     }
 
-    /* Calls resetInputs() and resetScores() to erase entire scoreboard.
-     */
+    // Calls resetInputs() and resetScores() to erase entire scoreboard.
     private void resetBoard() {
         resetInputs();
         resetScores();
     }
 
-    /* Iterates through all input-holding TextFields, and erases their content.
-     */
+    // Iterates through all input-holding TextFields, and erases their content.
     private void resetInputs() {
-        for (int i = 0; i < inputFields.length; i++) {
+        for (int i = 0; i < inputFields.length; i++)
             inputFields[i].setText("");
-        }
     }
 
-    /* Iterates through all score-holding TextFields, and erases their content.
-    */
+    // Iterates through all score-holding TextFields, and erases their content.
     private void resetScores() {
-        for (int i = 0; i < scoreFields.length; i++) {
+        for (int i = 0; i < scoreFields.length; i++)
             scoreFields[i].setText("");
-        }
     }
 
-    /* Converts a character digit, to an int.
-       @params: input = character in the form of a digit.
-       @return: Integer value.
-    */
+    // Given a character input, returns a converted integer value.
     private int charToInt(char input) {
         return input - '0';
     }
 
-    /* Checks whether the character is a digit between 0 and 9.
-       @params: input = character.
-       @return: boolean value (true if character is a digit, else false).
-    */
+    // Given a character input, returns whether the character can be treated as a number.
     private boolean isNum(char input) {
-        return input >= '0' && input <= '9';
-    }
-
-    /* Mutates specified index in the global level variable, [scores]. Mutator method to encapsulate data.
-       @params: frame = index to set in [scores]
-       @params: value = value to set in [scores]
-    */
-    private void setScore(int frame, int value) {
-        this.scores[frame] = value;
-    }
-
-    /* Grabs specified index from the global level variable, [scores]. Accessor method to encapsulate data.
-       @params: frame = index to grab from [scores]
-       @return: int value from [scores]
-    */
-    private int getScore(int frame) {
-        return this.scores[frame];
-    }
-
-    /* Grabs specified index from the global level variable, [inputs].Accessor method to encapsulate data.
-       @params: index = index to grab from input
-       @return: character value from [inputs]
-    */
-    private char getInput(int index) {
-        return inputs.charAt(index);
+        return input >= '0' && input <= '9' || input == WRONG_CHAR;
     }
 }
