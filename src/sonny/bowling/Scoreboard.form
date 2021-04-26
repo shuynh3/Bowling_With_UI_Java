@@ -718,7 +718,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <text value="Enter &quot;x&quot; or &quot;X&quot; in the first box for a strike, &quot;/&quot; for a spare, and &quot;0-9&quot; for each shot that is not a strike or spare. Leave empty if round is not played yet."/>
+          <text value="Enter &quot;x&quot; or &quot;X&quot; in the first box for a strike, a digit in the first box and &quot;/&quot; in the second box for a spare, and a digit for each shot that is not a strike or spare. Leave empty if round is not played yet."/>
         </properties>
       </component>
       <vspacer id="d0b20">
@@ -733,7 +733,7 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
         <properties>
-          <text value="Only the first character per textfield is inputted. All undefined characters will be treated as 0. If two textfields summate &gt; 9 the frame will be treated as a spare."/>
+          <text value="Only the first character per box is inputted. All undefined characters will be treated as 0. If two textfields summate &gt; 9 the frame will be treated as a spare."/>
         </properties>
       </component>
       <vspacer id="df267">
